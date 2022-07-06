@@ -27,10 +27,21 @@ interface Name {
   selector: 'nz-demo-list-infinite-load',
   template: `
     <div>
+    <a nz-dropdown [nzDropdownMenu]="menu">
+      <i nz-icon nzType="table" nzTheme="outline"></i>
+    </a>
+    <nz-dropdown-menu #menu="nzDropdownMenu">
+      <ul nz-menu nzSelectable>
+        <li nz-menu-item (click)="changeLayout(4)">4 items</li>
+        <li nz-menu-item (click)="changeLayout(6)">6 items</li>
+        <li nz-menu-item (click)="changeLayout(8)">8 items</li>
+      </ul>
+    </nz-dropdown-menu>
+
       <cdk-virtual-scroll-viewport itemSize="10" class="demo-infinite-container">
         <nz-list nzGrid>
           <div nz-row [nzGutter]="24">
-            <nz-list-item nz-col [nzSpan]="12" *cdkVirtualFor="let item of ds">
+            <nz-list-item nz-col [nzSpan]="colSpan" *cdkVirtualFor="let item of ds">
                 <nz-card style="width:300px;" [nzTitle]="item.label">
                   <p>Card content</p>
                   <p>Card content</p>
@@ -66,10 +77,16 @@ export class NzDemoListInfiniteLoadComponent {
     label: string;
   }> = [];
 
+  colSpan: number = 8; // default
+
   constructor() {
     // this.ds = new MyDataSource(this.http);
     this.ds = Array.from({ length: 100000 }, (v, i) => ({
       label: `Card ${i + 1}`,
     }));
+  }
+
+  changeLayout(nzSpan: number) {
+    this.colSpan = 24 / nzSpan;
   }
 }
